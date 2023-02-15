@@ -1,4 +1,3 @@
-from octoml_profile import RemoteInferenceSession, accelerate, remote_profile
 from transformers import (DistilBertForSequenceClassification,
                           DistilBertTokenizer)
 
@@ -15,15 +14,12 @@ examples = [
 inputs = tokenizer(examples, return_tensors="pt")
 
 
-@accelerate
 def run_model(inputs):
     return model(**inputs)
 
 
-session = RemoteInferenceSession()
-with remote_profile(session):
-    for i in range(3):
-        result = run_model(inputs)
+for i in range(3):
+    result = run_model(inputs)
 
 predicted_class_ids = result.logits.argmax(dim=1)
 
